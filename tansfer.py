@@ -251,10 +251,10 @@ for epoch in range(30):  # loop over the dataset multiple times
         # print statistics
         running_loss += loss.item()
         
-        if i % 20 == 19:    # print every 2000 mini-batches
-            tensorboard_writer.add_scalar("Loss/train", running_loss / 20, global_step=n_iter)
+        if i % 200 == 199:    # print every 2000 mini-batches
+            tensorboard_writer.add_scalar("Loss/train", running_loss / 200, global_step=n_iter)
             print('[%d, %5d] loss: %.3f' %
-                  (epoch + 1, i + 1, running_loss / 20))
+                  (epoch + 1, i + 1, running_loss / 200))
             running_loss = 0.0            
     
         n_iter += 1
