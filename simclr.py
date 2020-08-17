@@ -83,7 +83,10 @@ class SimCLR(object):
         valid_n_iter = 0
         best_valid_loss = np.inf
 
-        for epoch_counter in range(self.config['epochs']):
+        validation_loss_temperature = 0
+        epoch_counter = 0
+
+        while True:
             # print("epoch {}".format(epoch_counter))
             for (xis, xjs) in train_loader:
                 # print("epoch completed : {} %".format(round(n_iter % (len(train_loader)) / len(train_loader) * 100, 2) ))
@@ -109,10 +112,14 @@ class SimCLR(object):
             # validate the model if requested
             if epoch_counter % self.config['eval_every_n_epochs'] == 0:
                 valid_loss = self._validate(model, valid_loader)
+                validation_loss_temperature += 1
                 if valid_loss < best_valid_loss:
                     # save the model weights
                     best_valid_loss = valid_loss
+                    validation_loss_temperature = 0
                     torch.save(model.state_dict(), os.path.join(model_checkpoints_folder, 'model.pth'))
+                if validation_loss_temperature == 5:
+                    break
 
                 self.writer.add_scalar('validation_loss', valid_loss, global_step=valid_n_iter)
                 valid_n_iter += 1
@@ -121,6 +128,7 @@ class SimCLR(object):
             if epoch_counter >= 10:
                 scheduler.step()
             self.writer.add_scalar('cosine_lr_decay', scheduler.get_lr()[0], global_step=n_iter)
+            epoch_counter += 1
 
     def _load_pre_trained_weights(self, model):
         try:
