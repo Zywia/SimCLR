@@ -16,7 +16,7 @@ from torch.utils.tensorboard import SummaryWriter
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 print("Using device:", device)
 
-folder_name = 'runs/Jul24_21-14-05_WMII2084'
+folder_name = 'runs/Aug17_10-02-31_WMII2084'
 
 checkpoints_folder = os.path.join(folder_name, 'checkpoints')
 config = yaml.load(open(os.path.join(checkpoints_folder, "config.yaml"), "r"))
